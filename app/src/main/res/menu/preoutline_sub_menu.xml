@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/preoutline_sub_download"
+        android:title="@string/download_file"/>
+    <item android:id="@+id/preoutline_sub_result"
+        android:title="@string/preoutline_result"
+        android:visible="false"/>
+</menu>

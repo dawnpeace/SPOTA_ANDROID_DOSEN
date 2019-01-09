@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConsultationReplyActivity">
+    <EditText
+        android:id="@+id/et_consultation_reply"
+        android:inputType="textMultiLine"
+        android:minLines="4"
+        android:maxLines="8"
+        android:scrollbars="vertical"
+        android:gravity="top|left"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:textColor="@android:color/black"
+        android:layout_height="80sp"
+        android:hint="@string/add_reply"
+        android:textSize="14sp"
+        android:layout_margin="10sp"/>
+    <Button
+        android:id="@+id/btn_consultation_submit"
+        android:layout_width="100sp"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:text="@string/reply"
+        android:textSize="15sp"
+        android:layout_margin="10sp"
+        android:textColor="@android:color/black"
+        android:layout_gravity="end"
+        android:padding="5sp"
+        />
+</LinearLayout>

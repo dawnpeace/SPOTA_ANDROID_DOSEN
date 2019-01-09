@@ -1,0 +1,69 @@
+<resources>
+    <string name="app_name">SPOTA</string>
+    <string name="open_drawer">Open Nav Drawer</string>
+    <string name="close_drawer">Close Nav Drawer</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="menu_preoutline_all">Draft</string>
+    <string name="menu_preoutline_done">History</string>
+    <string name="menu_consultation">Konsultasi</string>
+    <string name="menu_announcement">Pengumuman</string>
+    <string name="login_button_text">LOGIN</string>
+    <string name="identity_number_hint">Nomor Identitas</string>
+    <string name="password_hint">Password</string>
+    <string name="menu_notification">Daftar Pemberitahuan</string>
+    <string name="menu_statistic">Statistik Draft</string>
+    <string name="menu_search">Pencarian</string>
+    <string name="menu_logout">Logout</string>
+    <string name="dialog_close">Tutup</string>
+    <string name="btn_comment">Berikan Komentar</string>
+    <string name="download_file">Download File</string>
+    <string name="preoutline_result">Beri Putusan</string>
+    <string name="sub_menu">&#8942;</string>
+    <string name="sub_menu_reply">Balas</string>
+    <string name="sub_menu_delete">Hapus</string>
+    <string name="reply">Balas</string>
+    <string name="add_reply">Tambahkan Komentar . . </string>
+    <string name="my_schedule">Jadwal Saya</string>
+    <string name="expertise">Kelompok Keahlian</string>
+    <string name="lecturer">Dosen</string>
+    <string name="statistic_status">Status Draft Praoutline</string>
+    <string name="approved">Diterima</string>
+    <string name="rejected">Ditolak</string>
+    <string name="closed">Gugur</string>
+    <string name="alltime">Seluruh Draft</string>
+    <string name="this_semester">Semester Ini</string>
+    <string name="statistic_by_semester">Total Draft Tiap Semester</string>
+    <string name="examined_count">Uji</string>
+    <string name="supervised_count">Bimbing</string>
+    <string name="current">Saat ini</string>
+    <string name="total">Total</string>
+    <string name="draft_closing">Beri Keputusan</string>
+    <string name="final_title">Judul Akhir</string>
+    <string name="supervisor">Pembimbing *</string>
+    <string name="examiner">Penguji</string>
+    <string name="first_supervisor">Pembimbing I</string>
+    <string name="second_supervisor">Pembimbing II</string>
+    <string name="first_examiner">Penguji I</string>
+    <string name="second_examiner">Penguji II</string>
+    <string name="additional_notes">Catatan Tambahan . .</string>
+    <string name="expertise_required">Kelompok Keahlian *</string>
+    <string name="submit_draft_closing">BERI PUTUSAN</string>
+    <string name="supervisor_closing_failure">Pembimbing tidak boleh sama</string>
+    <string name="supervisor_examiner_closing_failure">Pembimbing tidak boleh sama dengan Penguji</string>
+    <string name="examiner_closing_faulure">Penguji tidak boleh sama</string>
+    <string name="final_title_failure">Judul akhir tidak boleh kosong.</string>
+    <string-array name="draft_result">
+        <item>Diterima</item>
+        <item>Ditolak</item>
+        <item>Gugur</item>
+    </string-array>
+    <string name="closing_notes"><u>Draft bisa ditutup bila keputusan bukan berupa penerimaan.</u></string>
+    <string name="old_password_hint">Masukkan Password Lama</string>
+    <string name="new_password_hint">Masukkan Password Baru</string>
+    <string name="confirm_password_hint">Konfirmasi Password Baru</string>
+    <string name="profile_name_hint">Masukkan Nama</string>
+    <string name="profile_email_hint">Masukkan Email</string>
+    <string name="menu_update_profile">Profile</string>
+</resources>
