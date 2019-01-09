@@ -18,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,11 +31,6 @@ import com.example.dawnpeace.spota_android_dosen.TabFragment.AnnouncementFragmen
 import com.example.dawnpeace.spota_android_dosen.TabFragment.ConsultationFragment;
 import com.example.dawnpeace.spota_android_dosen.TabFragment.DraftFragment;
 import com.example.dawnpeace.spota_android_dosen.TabFragment.ReviewedDraftFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private BottomNavigationView mBottomNav;
-    private FrameLayout mFrame;
     private SharedPrefHelper mSharedPref;
     private NavigationView navDrawer;
     private ImageView iv_nav_header;
@@ -87,24 +80,32 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.nav_notification_list:
-                        Intent intent1 = new Intent(MainActivity.this,NotificationActivity.class);
+                        Intent intent1 = new Intent(MainActivity.this, NotificationActivity.class);
                         startActivity(intent1);
                         break;
                     case R.id.nav_statistic:
-                        Intent intent2 = new Intent(MainActivity.this,StatisticActivity.class);
+                        Intent intent2 = new Intent(MainActivity.this, StatisticActivity.class);
                         startActivity(intent2);
                         break;
                     case R.id.nav_schedule:
-                        Intent intent3 = new Intent(MainActivity.this,ScheduleActivity.class);
+                        Intent intent3 = new Intent(MainActivity.this, ScheduleActivity.class);
                         startActivity(intent3);
                         break;
                     case R.id.nav_search:
-                        Intent intent4 = new Intent(MainActivity.this,SearchActivity.class);
+                        Intent intent4 = new Intent(MainActivity.this, SearchActivity.class);
                         startActivity(intent4);
                         break;
                     case R.id.nav_profile:
-                        Intent intent5 = new Intent(MainActivity.this,ProfileActivity.class);
+                        Intent intent5 = new Intent(MainActivity.this, ProfileActivity.class);
                         startActivity(intent5);
+                        break;
+                    case R.id.nav_ready_draft:
+                        Intent intent6 = new Intent(MainActivity.this, ReadyCloseActivity.class);
+                        startActivity(intent6);
+                        break;
+                    case R.id.nav_about:
+                        Intent intent7 = new Intent(MainActivity.this, AboutActivity.class);
+                        startActivity(intent7);
                         break;
                     case R.id.nav_logout:
                         logout();
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     mSharedPref.storeUser(response.body());
-                    if(mSharedPref.getUser() != null){
+                    if (mSharedPref.getUser() != null) {
                         Glide.with(MainActivity.this)
                                 .load(mSharedPref.getUser().getPictureUrl())
                                 .apply(RequestOptions.circleCropTransform())
@@ -188,8 +189,9 @@ public class MainActivity extends AppCompatActivity {
                         tv_nav_name.setText(mSharedPref.getUser().getName());
                         tv_nav_identity_number.setText(mSharedPref.getUser().getIdentity_number());
 
-                        if(!mSharedPref.getUser().isMajorheadmaster()){
+                        if (!mSharedPref.getUser().isMajorheadmaster()) {
                             navDrawer.getMenu().getItem(2).setVisible(false);
+                            navDrawer.getMenu().getItem(4).setVisible(false);
                         }
                     }
                 }
@@ -205,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        AlertDialog.Builder logoutAlert = new AlertDialog.Builder(this,R.style.AlertDialog);
+        AlertDialog.Builder logoutAlert = new AlertDialog.Builder(this, R.style.AlertDialog);
 
         logoutAlert.setMessage("Apakah anda yakin untuk keluar ?")
                 .setCancelable(true)
@@ -222,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                         call.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
-                                if(response.isSuccessful()){
+                                if (response.isSuccessful()) {
                                     mSharedPref.logout();
                                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                     new LogoutTask().execute();
@@ -250,10 +252,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void checkTokenAvailability(){
-        if(mSharedPref.getFirebaseToken() != null ){
-            Log.d("FCMTOKEN", "onResponse: "+mSharedPref.getFirebaseToken());
-            if(!mSharedPref.issetFCMToken()){
+    private void checkTokenAvailability() {
+        if (mSharedPref.getFirebaseToken() != null) {
+            Log.d("FCMTOKEN", "onResponse: " + mSharedPref.getFirebaseToken());
+            if (!mSharedPref.issetFCMToken()) {
                 Retrofit retrofit = new Retrofit.Builder().baseUrl(APIUrl.BASE_URL)
                         .client(mSharedPref.getInterceptor())
                         .addConverterFactory(GsonConverterFactory.create())
@@ -264,9 +266,9 @@ public class MainActivity extends AppCompatActivity {
                 call.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
-                        if(response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             mSharedPref.setFcmTokenAvailability(true);
-                            Log.d("FCMTOKEN", "onResponse: "+mSharedPref.getFirebaseToken());
+                            Log.d("FCMTOKEN", "onResponse: " + mSharedPref.getFirebaseToken());
                         }
                     }
 
@@ -278,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
 }

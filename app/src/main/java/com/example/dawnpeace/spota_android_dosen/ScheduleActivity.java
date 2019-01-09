@@ -88,7 +88,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Schedule>> call, Throwable t) {
-
+                
             }
         });
     }

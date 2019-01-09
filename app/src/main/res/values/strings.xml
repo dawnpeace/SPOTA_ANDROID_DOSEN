@@ -66,4 +66,6 @@
     <string name="profile_name_hint">Masukkan Nama</string>
     <string name="profile_email_hint">Masukkan Email</string>
     <string name="menu_update_profile">Profile</string>
+    <string name="menu_ready_close">Draft Siap Close</string>
+    <string name="menu_about">Tentang Aplikasi</string>
 </resources>

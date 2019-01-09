@@ -34,6 +34,9 @@ public interface PraoutlineInterface {
     @POST("api/dosen/info-praoutline/{id}")
     Call<PraoutlineInfo> getDraftInfo(@Path("id") int id);
 
+    @POST("api/dosen/praoutline/siap-close")
+    Call<List<Praoutline>> getReadyDraft();
+
     @FormUrlEncoded
     @POST("api/dosen/close-draft/{preoutline_id}")
     Call<Void> approveDraft(@Path("preoutline_id") int preoutline_id,

@@ -11,7 +11,6 @@
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"
         android:resource="@drawable/ic_notification_icon" />
-
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_color"
         android:resource="@color/colorAccent" />
@@ -24,7 +23,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -78,7 +76,14 @@
             android:name=".CloseDraftActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ReadyCloseActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".AboutActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
