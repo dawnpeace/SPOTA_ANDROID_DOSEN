@@ -103,7 +103,7 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Praoutline>> call, Response<List<Praoutline>> response) {
                     if(response.isSuccessful()){
-                        rv_preoutlines = (RecyclerView) findViewById(R.id.rv_search);
+                        rv_preoutlines = findViewById(R.id.rv_search);
                         PraoutlineDraftAdapter adapter = new PraoutlineDraftAdapter(SearchActivity.this,response.body());
                         rv_preoutlines.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
                         rv_preoutlines.setAdapter(adapter);

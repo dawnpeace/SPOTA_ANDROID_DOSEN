@@ -81,9 +81,7 @@ public class SharedPrefHelper {
 
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        if (sharedPreferences.getString(KEY_USER_TOKEN, null) != null)
-            return true;
-        return false;
+        return sharedPreferences.getString(KEY_USER_TOKEN, null) != null;
     }
 
 

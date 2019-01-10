@@ -334,9 +334,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         if (new_password.length() > 6 && new_password.length() < 12 && new_password.equals(confirm_password)) {
-            if (old_password.length() > 6 && old_password.length() < 12 && !old_password.equals(new_password)) {
-                return true;
-            }
+            return old_password.length() > 6 && old_password.length() < 12 && !old_password.equals(new_password);
         }
         return false;
     }

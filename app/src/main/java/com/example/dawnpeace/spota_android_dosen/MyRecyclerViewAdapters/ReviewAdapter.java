@@ -84,7 +84,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                                     mContext.startActivity(intent);
                                     break;
                                 case R.id.review_delete:
-                                    AlertDialog.Builder alert = new AlertDialog.Builder((Activity) mContext);
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
                                     alert.setTitle("Hapus Komentar");
                                     alert.setMessage("Apakah Anda yakin ingin melanjutkan ?");
                                     alert.setPositiveButton("YA", new DialogInterface.OnClickListener() {
@@ -183,12 +183,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            cv_review = (CardView) itemView.findViewById(R.id.cv_review);
-            tv_name = (TextView) itemView.findViewById(R.id.cv_name);
-            tv_identity_number = (TextView) itemView.findViewById(R.id.cv_identity_number);
-            tv_comment = (TextView) itemView.findViewById(R.id.cv_comment);
-            tv_date = (TextView) itemView.findViewById(R.id.cv_date);
-            tv_sub_menu = (TextView) itemView.findViewById(R.id.tv_sub_menu);
+            cv_review = itemView.findViewById(R.id.cv_review);
+            tv_name = itemView.findViewById(R.id.cv_name);
+            tv_identity_number = itemView.findViewById(R.id.cv_identity_number);
+            tv_comment = itemView.findViewById(R.id.cv_comment);
+            tv_date = itemView.findViewById(R.id.cv_date);
+            tv_sub_menu = itemView.findViewById(R.id.tv_sub_menu);
         }
     }
 }

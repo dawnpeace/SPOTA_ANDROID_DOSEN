@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_layout, new DraftFragment()).commit();
-        mBottomNav = (BottomNavigationView) findViewById(R.id.bottom_nav);
+        mBottomNav = findViewById(R.id.bottom_nav);
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkTokenAvailability() {
         if (mSharedPref.getFirebaseToken() != null) {
             Log.d("FCMTOKEN", "onResponse: " + mSharedPref.getFirebaseToken());
-            if (!mSharedPref.issetFCMToken()) {
+            if (!mSharedPref.issetFCMToken() && mSharedPref.getToken() != null) {
                 Retrofit retrofit = new Retrofit.Builder().baseUrl(APIUrl.BASE_URL)
                         .client(mSharedPref.getInterceptor())
                         .addConverterFactory(GsonConverterFactory.create())

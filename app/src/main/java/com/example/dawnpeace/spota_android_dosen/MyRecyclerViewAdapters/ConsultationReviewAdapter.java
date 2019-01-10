@@ -73,7 +73,7 @@ public class ConsultationReviewAdapter extends  RecyclerView.Adapter<Consultatio
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            AlertDialog.Builder alert = new AlertDialog.Builder((Activity) context);
+                            AlertDialog.Builder alert = new AlertDialog.Builder(context);
                             alert.setTitle("Hapus Komentar");
                             alert.setMessage("Apakah Anda yakin ingin melanjutkan ?");
                             final int review_id = review.getId();

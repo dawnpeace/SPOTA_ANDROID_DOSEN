@@ -156,15 +156,11 @@ public class PreoutlineActivity extends AppCompatActivity {
 
                 if(response.isSuccessful()){
                     if(response.body() != null){
-                        try{
-                            setView(response.body());
-                            url = response.body().getFile();
-                            review_intent.putExtra("preoutline_status",response.body().getStatus());
-                            if(response.body().getStatus().equals("open") && mSharedPref.getUser().isMajorheadmaster()){
-                                menu.getItem(1).setVisible(true);
-                            }
-                        } catch (UnsupportedEncodingException e){
-                            e.printStackTrace();
+                        setView(response.body());
+                        url = response.body().getFile();
+                        review_intent.putExtra("preoutline_status",response.body().getStatus());
+                        if(response.body().getStatus().equals("open") && mSharedPref.getUser().isMajorheadmaster()){
+                            menu.getItem(1).setVisible(true);
                         }
                     }
                 } else {
@@ -174,8 +170,7 @@ public class PreoutlineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Draft> call, Throwable t) {
-                Toast.makeText(PreoutlineActivity.this, "asdsadsd", Toast.LENGTH_SHORT).show();
-                Log.d("FAILUREMAN", "onFailure: "+t.getMessage());
+                Toast.makeText(PreoutlineActivity.this, "Terjadi Kesalahan", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -186,7 +181,7 @@ public class PreoutlineActivity extends AppCompatActivity {
         loadData();
     }
 
-    private void setView(final Draft draft) throws UnsupportedEncodingException {
+    private void setView(final Draft draft) {
         String data = draft.getDescription();  // the html data
         tv_description.setText(Html.fromHtml(data,null,new MyTagHandler()));
         tv_title.setText(draft.getTitle());
