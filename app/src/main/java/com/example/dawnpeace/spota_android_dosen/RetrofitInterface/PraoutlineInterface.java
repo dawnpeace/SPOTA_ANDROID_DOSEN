@@ -43,8 +43,8 @@ public interface PraoutlineInterface {
                           @Field("result") String result,
                           @Field("first_supervisor") int first_supervisor,
                           @Field("second_supervisor") int second_supervisor,
-                          @Field("first_examiner") int first_examiner,
-                          @Field("second_examiner") int second_examiner,
+                          @Field("first_examiner") String first_examiner,
+                          @Field("second_examiner") String second_examiner,
                           @Field("expertise_id") int expertise_id,
                           @Field("notes") String notes,
                             @Field("final_title") String final_title);

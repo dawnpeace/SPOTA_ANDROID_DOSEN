@@ -5,12 +5,19 @@ public class Login {
     private String token_type;
     private String type;
     private int error;
+    private String status;
 
-    public Login(String access_token, String token_type, String type, int error) {
+
+    public Login(String access_token, String token_type, String type, int error, String status) {
         this.access_token = access_token;
         this.token_type = token_type;
         this.type = type;
         this.error = error;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public String getAccess_token() {

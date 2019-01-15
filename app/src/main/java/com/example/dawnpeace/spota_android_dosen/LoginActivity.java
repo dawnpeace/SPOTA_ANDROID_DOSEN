@@ -81,17 +81,24 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Login> call, Response<Login> response) {
                 if(response.isSuccessful()){
-                    if(response.body().getType().equals("D") ){
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        mSharedPref.storeToken(response.body().getAccess_token());
-                        startActivity(intent);
-                        finish();
-
-                    } else {
+                    if(response.body().getType().equals("D")  ){
+                        if(response.body().getStatus().equals("A")){
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            mSharedPref.storeToken(response.body().getAccess_token());
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Akun anda nonaktif", Toast.LENGTH_SHORT).show();
+                        }
+                    } else{
                         Toast.makeText(LoginActivity.this, "Akun tidak ditemukan !", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Terjadi Kesalahan", Toast.LENGTH_SHORT).show();
+                    if(response.code() == 401){
+                        Toast.makeText(LoginActivity.this, "Akun tidak ditemukan !", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Terjadi Kesalahan", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

@@ -139,6 +139,7 @@ public class PreoutlineActivity extends AppCompatActivity {
         ib_comment = findViewById(R.id.ib_comment);
         tv_status = findViewById(R.id.tv_draft_status);
         rv_approval = findViewById(R.id.rv_approvals);
+        rv_approval.setNestedScrollingEnabled(false);
         ll_preoutline = findViewById(R.id.ll_preoutline_draft);
     }
 

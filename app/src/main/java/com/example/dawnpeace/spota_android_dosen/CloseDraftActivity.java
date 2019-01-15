@@ -13,11 +13,15 @@ import android.widget.Toast;
 
 import com.example.dawnpeace.spota_android_dosen.Model.Expertise;
 import com.example.dawnpeace.spota_android_dosen.Model.Lecturer;
+import com.example.dawnpeace.spota_android_dosen.Model.Message;
 import com.example.dawnpeace.spota_android_dosen.Model.Statistic.PraoutlineInfo;
 import com.example.dawnpeace.spota_android_dosen.RetrofitInterface.PraoutlineInterface;
 import com.example.dawnpeace.spota_android_dosen.SpinnerAdapter.ExpertiseAdapter;
 import com.example.dawnpeace.spota_android_dosen.SpinnerAdapter.LecturerAdapter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +57,7 @@ public class CloseDraftActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         preoutline_id = bundle.getInt("preoutline_id");
-
+        Toast.makeText(this, preoutline_id+"", Toast.LENGTH_SHORT).show();
         mSharedPref = SharedPrefHelper.getInstance(this);
         initView();
         loadData();
@@ -189,8 +193,9 @@ public class CloseDraftActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.final_title_failure), Toast.LENGTH_SHORT).show();
                 finish();
             }
-
-            Call<Void> call = praoutlineInterface.approveDraft(preoutline_id,results,first_supervisor_id,second_supervisor_id,first_examiner_id,second_examiner_id,expertise_id,et_notes.getText().toString(),final_title);
+            String examiner_id1 = first_examiner_id == 0 ? null : String.valueOf(first_examiner_id);
+            String examiner_id2 = second_examiner_id == 0 ? null : String.valueOf(second_examiner_id);
+            Call<Void> call = praoutlineInterface.approveDraft(preoutline_id,results,first_supervisor_id,second_supervisor_id,examiner_id1,examiner_id2,expertise_id,et_notes.getText().toString(),final_title);
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
@@ -198,7 +203,18 @@ public class CloseDraftActivity extends AppCompatActivity {
                         Toast.makeText(CloseDraftActivity.this, "Berhasil !", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
-                        Toast.makeText(CloseDraftActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        if(response.code() == 400){
+                            Gson gson = new GsonBuilder().create();
+                            Message err_message;
+                            try {
+                                err_message = gson.fromJson(response.errorBody().string(), Message.class);
+                                Toast.makeText(CloseDraftActivity.this, err_message.getError_message(), Toast.LENGTH_SHORT).show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(CloseDraftActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
