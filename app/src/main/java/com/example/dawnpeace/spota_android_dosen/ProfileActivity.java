@@ -1,12 +1,20 @@
 package com.example.dawnpeace.spota_android_dosen;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +22,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -29,7 +38,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -69,6 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         mSharedPref = SharedPrefHelper.getInstance(this);
         initView();
+        checkPermission();
     }
 
     private void setUploading(boolean isUploading) {
@@ -237,6 +250,13 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void checkPermission(){
+        String[] read_external_permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, read_external_permission,1);
+        }
+    }
+
     private void submitChange() {
         if (checkSubmit()) {
             if (uploading) {
@@ -250,8 +270,11 @@ public class ProfileActivity extends AppCompatActivity {
             MultipartBody.Part filePart = null;
 
             if (image_uri != null) {
-                String filePath = Build.VERSION.SDK_INT < 21 ? getImagePath(image_uri) : getRealPathFromURIPath(image_uri, this);
-                File file = new File(filePath);
+                if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "Pastikan aplikasi memiliki izin mengakses file", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                File file = getFileFromUri(this,image_uri);
                 RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                 filePart = MultipartBody.Part.createFormData("picture", file.getName(), mFile);
             }
@@ -313,36 +336,13 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(intent, FILE_REQUEST_CODE);
     }
 
-    private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
-        Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) {
-            return contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            return cursor.getString(idx);
-        }
-    }
 
-    public String getImagePath(Uri uri){
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":")+1);
-        cursor.close();
-
-        cursor = getContentResolver().query(
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        cursor.moveToFirst();
-        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-        cursor.close();
-
-        return path;
-    }
 
     private boolean checkSubmit() {
-        boolean valid = false;
+        if(et_email.getText().toString().trim().isEmpty() || et_name.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "Nama dan Email tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
         String new_password = et_password.getText().toString();
         String old_password = et_old_password.getText().toString();
@@ -364,4 +364,41 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
         return super.onSupportNavigateUp();
     }
+
+    private File getFileFromUri(Context ctx, Uri uri){
+        OutputStream out = null;
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        String mimeType = mime.getExtensionFromMimeType(ctx.getContentResolver().getType(uri));
+        File file = new File(getCacheDir(),"profile."+mimeType);
+        InputStream in = null;
+        try {
+            in = ctx.getContentResolver().openInputStream(uri);
+            out = new FileOutputStream(file);
+            byte[] buf = new byte[1024];
+            int len;
+            while((len=in.read(buf))>0){
+                out.write(buf,0,len);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            // Ensure that the InputStreams are closed even if there's an exception.
+            try {
+                if ( out != null ) {
+                    out.close();
+                }
+
+                // If you want to close the "in" InputStream yourself then remove this
+                // from here but ensure that you close it yourself eventually.
+                in.close();
+            }
+            catch ( IOException e ) {
+                e.printStackTrace();
+            }
+        }
+        return file;
+    }
+
 }

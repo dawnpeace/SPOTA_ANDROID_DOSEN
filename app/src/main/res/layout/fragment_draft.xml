@@ -4,14 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="@android:color/white">
-    <RelativeLayout
-        android:id="@+id/rl_progress_bar"
-        android:layout_width="80sp"
-        android:layout_height="80sp">
-        <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sr_draft"
         android:visibility="gone"
@@ -20,7 +13,14 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_unreviewed_draft"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>
-
+    <RelativeLayout
+        android:id="@+id/rl_progress_bar"
+        android:layout_width="80sp"
+        android:layout_height="80sp">
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
 </LinearLayout>

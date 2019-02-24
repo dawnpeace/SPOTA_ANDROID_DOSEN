@@ -33,7 +33,7 @@ public class LecturerAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return lecturers.get(position).getId();
     }
 
     @Override

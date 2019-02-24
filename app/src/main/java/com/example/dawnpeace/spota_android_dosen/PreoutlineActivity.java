@@ -1,38 +1,33 @@
 package com.example.dawnpeace.spota_android_dosen;
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dawnpeace.spota_android_dosen.Model.Approval;
 import com.example.dawnpeace.spota_android_dosen.Model.Draft;
 import com.example.dawnpeace.spota_android_dosen.Model.DraftApproval;
 import com.example.dawnpeace.spota_android_dosen.MyRecyclerViewAdapters.DraftViewAdapter;
 import com.example.dawnpeace.spota_android_dosen.RetrofitInterface.PraoutlineInterface;
 import com.example.dawnpeace.spota_android_dosen.RetrofitInterface.ReviewInterface;
-
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,7 +38,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PreoutlineActivity extends AppCompatActivity {
     private TextView tv_title;
     private TextView tv_description;
-    private ImageButton btn_review;
     private TextView tv_upvote;
     private TextView tv_downvote;
     private TextView tv_status;
@@ -56,7 +50,6 @@ public class PreoutlineActivity extends AppCompatActivity {
     private int preoutline_id;
     private Intent review_intent;
     private String url="";
-    private String preoutline_status;
     private Menu menu;
 
     @Override
@@ -66,7 +59,7 @@ public class PreoutlineActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Praoutline");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mSharedPref = SharedPrefHelper.getInstance(this);
-
+        checkPermission();
         Intent retriveIntent = getIntent();
         Bundle bundle = retriveIntent.getExtras();
 
@@ -99,20 +92,32 @@ public class PreoutlineActivity extends AppCompatActivity {
         return true;
     }
 
+    private void checkPermission(){
+        String[] read_external_permission = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, read_external_permission,1);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()){
             case R.id.preoutline_sub_download:
                 if(!url.isEmpty()){
+                    if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                        Toast.makeText(this, "Pastikan aplikasi memiliki izin mengakses file", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                     DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
                     Uri uri = Uri.parse(url);
-                    Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show();
+
                     DownloadManager.Request request = new DownloadManager.Request(uri);
                     request.setTitle("Draft Praoutline");
                     request.setDescription("Downloading");
-                    request.setDestinationInExternalPublicDir("/Downloads","Draft-praoutline.pdf");
-                    long downloadRef = downloadManager.enqueue(request);
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    request.setDestinationInExternalFilesDir(this,"Downloads","Draft.pdf");
+                    downloadManager.enqueue(request);
                 }
                 break;
             case R.id.preoutline_sub_result:
@@ -185,12 +190,13 @@ public class PreoutlineActivity extends AppCompatActivity {
     private void setView(final Draft draft) {
         String data = draft.getDescription();  // the html data
         tv_description.setText(Html.fromHtml(data,null,new MyTagHandler()));
+        tv_description.setMovementMethod(LinkMovementMethod.getInstance());
         tv_title.setText(draft.getTitle());
         String upvote_count = String.valueOf(draft.getUpvote_count());
         String downvote_count = String.valueOf(draft.getDownvote_count());
         tv_upvote.setText(upvote_count);
         tv_downvote.setText(downvote_count);
-        tv_status.setText(draft.getLocalizedStatus());
+        tv_status.setText("STATUS : "+draft.getLocalizedStatus());
 
         rv_approval.setLayoutManager(new LinearLayoutManager(this));
         DraftViewAdapter adapter = new DraftViewAdapter(this,draft.getApprovals());

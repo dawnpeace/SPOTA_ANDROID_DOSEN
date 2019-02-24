@@ -2,6 +2,7 @@ package com.example.dawnpeace.spota_android_dosen.MyRecyclerViewAdapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -43,6 +44,7 @@ public class PraoutlineDraftAdapter extends RecyclerView.Adapter<PraoutlineDraft
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tv_title.setText(mDraft.get(i).getTitle());
+        myViewHolder.status_view.setBackgroundColor(setStatusViewColor(mDraft.get(i).getStatus()));
         String name_identity = mDraft.get(i).getName() + " (" + mDraft.get(i).getIdentity_number() + ")";
         myViewHolder.tv_student_name.setText(name_identity);
         myViewHolder.tv_date.setText(mDraft.get(i).getCreated_at());
@@ -84,6 +86,20 @@ public class PraoutlineDraftAdapter extends RecyclerView.Adapter<PraoutlineDraft
         return mDraft.size();
     }
 
+    private int setStatusViewColor(String status){
+        switch(status){
+            case "Terbuka":
+                return Color.parseColor("#42A5F5");
+            case "Gugur":
+                return Color.parseColor("#d3d3d3");
+            case "Ditolak":
+                return Color.parseColor("#ff4c4c");
+            case "Diterima":
+                return Color.parseColor("#8aff8a");
+        }
+        return Color.parseColor("#FFFFFF");
+    }
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         private ImageView iv_pic;
@@ -94,6 +110,7 @@ public class PraoutlineDraftAdapter extends RecyclerView.Adapter<PraoutlineDraft
         private TextView tv_downvote;
         private TextView tv_comment;
         private CardView cv_praoutline;
+        private View status_view;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,6 +122,8 @@ public class PraoutlineDraftAdapter extends RecyclerView.Adapter<PraoutlineDraft
             tv_downvote = itemView.findViewById(R.id.tv_preoutline_downvote);
             tv_comment = itemView.findViewById(R.id.tv_preoutline_comment);
             cv_praoutline = itemView.findViewById(R.id.cv_praoutline);
+            status_view = itemView.findViewById(R.id.status_view);
         }
     }
+
 }

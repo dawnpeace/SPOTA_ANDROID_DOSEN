@@ -70,6 +70,7 @@ public class Draft {
         return localized_status;
     }
 
+
     public String getMy_approval() {
         return my_approval;
     }

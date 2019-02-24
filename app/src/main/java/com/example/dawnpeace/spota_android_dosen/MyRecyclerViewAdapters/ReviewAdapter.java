@@ -66,6 +66,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                     popup.inflate(R.menu.review_sub_menu);
                     if (mReview.get(viewHolder.getAdapterPosition()).getIdentity_number().equals(mSharedPref.getUser().getIdentity_number())) {
                         popup.getMenu().getItem(1).setVisible(true);
+                    } else {
+                        popup.getMenu().getItem(1).setVisible(false);
                     }
                     popup.show();
                     final String message = mReview.get(viewHolder.getAdapterPosition()).getComment();

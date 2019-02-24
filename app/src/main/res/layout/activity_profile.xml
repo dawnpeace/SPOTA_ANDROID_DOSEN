@@ -61,7 +61,7 @@
                 android:textSize="15sp"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
-                android:hint="@string/password_hint"
+                android:hint="@string/new_password_hint"
                 android:layout_margin="10sp"
                 android:layout_height="wrap_content" />
             <EditText

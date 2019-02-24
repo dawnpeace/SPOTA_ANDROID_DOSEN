@@ -1,6 +1,7 @@
 package com.example.dawnpeace.spota_android_dosen.RetrofitInterface;
 
 import com.example.dawnpeace.spota_android_dosen.Model.Login;
+import com.example.dawnpeace.spota_android_dosen.Model.MailSetting;
 import com.example.dawnpeace.spota_android_dosen.Model.Message;
 import com.example.dawnpeace.spota_android_dosen.Model.User;
 
@@ -32,4 +33,11 @@ public interface Auth {
 
     @POST("api/auth/destroy-fcm")
     Call<Void> destroyFcmToken();
+
+    @POST("api/dosen/pengaturan_mail")
+    Call<MailSetting> getCurrentSetting();
+
+    @FormUrlEncoded
+    @POST("api/dosen/pengaturan_mail/ubah")
+    Call<Void> changeSetting(@Field("new_draft")String new_draft, @Field("draft_review") String draft_review, @Field("consultation")String consultation);
 }

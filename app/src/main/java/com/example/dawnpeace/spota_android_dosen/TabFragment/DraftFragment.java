@@ -53,11 +53,6 @@ public class DraftFragment extends Fragment {
         return mainView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadDrafts();
-    }
 
     private void loadDrafts(){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(APIUrl.BASE_URL)

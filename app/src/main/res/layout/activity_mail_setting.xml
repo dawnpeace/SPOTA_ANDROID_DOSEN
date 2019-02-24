@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent"
+    tools:context=".MailSettingActivity">
+    <LinearLayout
+        android:id="@+id/ll_new_draft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10sp"
+        android:visibility="gone
+"
+        android:layout_marginBottom="8sp"
+        android:layout_marginTop="5sp"
+        android:paddingEnd="10sp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:text="Draft Baru"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_new_draft"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:theme="@style/AppTheme"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_draft_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:paddingStart="10sp"
+        android:layout_marginBottom="8sp"
+        android:visibility="gone"
+        android:paddingEnd="10sp"
+        android:layout_below="@id/ll_new_draft"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:text="Review Draft"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_draft_review"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:theme="@style/AppTheme"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_consultation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:paddingStart="10sp"
+        android:paddingEnd="10sp"
+        android:layout_marginBottom="8sp"
+        android:layout_below="@id/ll_draft_review"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:text="Konsultasi"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_consultation"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:theme="@style/AppTheme"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/bt_submit_change"
+        android:text="SIMPAN PERUBAHAN"
+        android:layout_alignParentBottom="true"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="5sp"
+        android:visibility="gone"
+        android:layout_marginStart="5sp"
+        android:layout_marginEnd="5sp"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

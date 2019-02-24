@@ -1,14 +1,18 @@
 package com.example.dawnpeace.spota_android_dosen;
 
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -48,12 +52,18 @@ public class MainActivity extends AppCompatActivity {
     private ImageView iv_nav_header;
     private TextView tv_nav_name;
     private TextView tv_nav_identity_number;
+    private Fragment newDraftFragment = new DraftFragment();
+    private Fragment historyFragment = new ReviewedDraftFragment();
+    private Fragment consultationFragment = new ConsultationFragment();
+    private Fragment announcementFragment = new AnnouncementFragment();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkPermission();
 
         mSharedPref = SharedPrefHelper.getInstance(this);
         checkTokenAvailability();
@@ -107,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent7 = new Intent(MainActivity.this, AboutActivity.class);
                         startActivity(intent7);
                         break;
+                    case R.id.nav_mail_notif:
+                        Intent intent8 = new Intent(MainActivity.this, MailSettingActivity.class);
+                        startActivity(intent8);
+                        break;
                     case R.id.nav_logout:
                         logout();
                         break;
@@ -123,16 +137,16 @@ public class MainActivity extends AppCompatActivity {
                 Fragment mFragment = null;
                 switch (menuItem.getItemId()) {
                     case R.id.new_preoutline_menu:
-                        mFragment = new DraftFragment();
+                        mFragment = newDraftFragment;
                         break;
                     case R.id.reviewed_preoutline_menu:
-                        mFragment = new ReviewedDraftFragment();
+                        mFragment = historyFragment;
                         break;
                     case R.id.consultation_menu:
-                        mFragment = new ConsultationFragment();
+                        mFragment = consultationFragment;
                         break;
                     case R.id.announcement_menu:
-                        mFragment = new AnnouncementFragment();
+                        mFragment = announcementFragment;
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_layout, mFragment).commit();
@@ -158,10 +172,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void checkPermission(){
+        String[] read_external_permission = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, read_external_permission,1);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         getAuthUser();
+
+        Fragment mFragment = null;
+        switch (mBottomNav.getSelectedItemId()) {
+            case R.id.new_preoutline_menu:
+                mFragment = newDraftFragment;
+                break;
+            case R.id.reviewed_preoutline_menu:
+                mFragment = historyFragment;
+                break;
+            case R.id.consultation_menu:
+                mFragment = consultationFragment;
+                break;
+            case R.id.announcement_menu:
+                mFragment = announcementFragment;
+                break;
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_layout, mFragment).commit();
     }
 
     private void getAuthUser() {
@@ -229,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
                                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                     new LogoutTask().execute();
                                     startActivity(intent);
+                                    ActivityCompat.finishAffinity(MainActivity.this);
                                     finish();
                                 } else {
                                     response.message();

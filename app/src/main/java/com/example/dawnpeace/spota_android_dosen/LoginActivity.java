@@ -45,10 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         et_password = findViewById(R.id.et_password);
         bt_login = findViewById(R.id.btn_login);
 
-
-
-
-
         bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
                 String password = et_password.getText().toString();
                 if(isValid(identity_number,password)){
                     login(identity_number,password);
+                } else {
+                    Toast.makeText(LoginActivity.this, "Nomor Identitas atau Password tidak boleh kosong .", Toast.LENGTH_SHORT).show();
                 }
             }
         });

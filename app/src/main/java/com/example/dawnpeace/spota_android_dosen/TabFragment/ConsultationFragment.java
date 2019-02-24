@@ -54,11 +54,6 @@ public class ConsultationFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadData();
-    }
 
     private void loadData(){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(APIUrl.BASE_URL)

@@ -7,6 +7,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,7 +47,11 @@ public class CloseDraftActivity extends AppCompatActivity {
     private EditText et_notes;
     private Button bt_submit;
     private SharedPrefHelper mSharedPref;
-
+    private Lecturer first_supervisor;
+    private Lecturer second_supervisor;
+    private Lecturer first_examiner;
+    private Lecturer second_examiner;
+    private String finalTitle;
     private int preoutline_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +64,6 @@ public class CloseDraftActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         preoutline_id = bundle.getInt("preoutline_id");
-        Toast.makeText(this, preoutline_id+"", Toast.LENGTH_SHORT).show();
         mSharedPref = SharedPrefHelper.getInstance(this);
         initView();
         loadData();
@@ -143,10 +149,21 @@ public class CloseDraftActivity extends AppCompatActivity {
             ExpertiseAdapter adapter = new ExpertiseAdapter(CloseDraftActivity.this,expertises);
             expertise_spinner.setAdapter(adapter);
         }
+        ScrollView scrollView = findViewById(R.id.sv_close_draft);
+        scrollView.setVisibility(View.VISIBLE);
+        ProgressBar progressBar = findViewById(R.id.pb_close_draft);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void inputSubmission(){
-        String results = result_spinner.getSelectedItem().toString().toLowerCase().trim();
+        String results = result_spinner.getSelectedItem().toString().toLowerCase();
+        first_supervisor = (Lecturer) first_supervisor_spinner.getSelectedItem();
+        second_supervisor = (Lecturer) second_supervisor_spinner.getSelectedItem();
+        first_examiner = (Lecturer) first_examiner_spinner.getSelectedItem();
+        second_examiner = (Lecturer) second_examiner_spinner.getSelectedItem();
+        finalTitle = et_title.getText().toString();
+
+
         Retrofit retrofit = new Retrofit.Builder().baseUrl(APIUrl.BASE_URL)
                 .client(mSharedPref.getInterceptor())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -155,47 +172,19 @@ public class CloseDraftActivity extends AppCompatActivity {
         PraoutlineInterface praoutlineInterface = retrofit.create(PraoutlineInterface.class);
 
         if(results.equals("diterima")){
-            Lecturer first_supervisor = (Lecturer) first_supervisor_spinner.getSelectedItem();
-            Lecturer second_supervisor = (Lecturer) second_supervisor_spinner.getSelectedItem();
-            Lecturer first_examiner = (Lecturer) first_examiner_spinner.getSelectedItem();
-            Lecturer second_examiner = (Lecturer) second_examiner_spinner.getSelectedItem();
-            Expertise expertise = (Expertise) expertise_spinner.getSelectedItem();
+            if(!inputValidation()){
+                return;
+            }
 
+            Expertise expertise = (Expertise) expertise_spinner.getSelectedItem();
             int first_supervisor_id = first_supervisor.getId();
             int second_supervisor_id = second_supervisor.getId();
             int first_examiner_id = first_examiner.getId();
             int second_examiner_id = second_examiner.getId();
             int expertise_id = expertise.getId();
-
-            if(first_supervisor == second_supervisor){
-                Toast.makeText(this, getString(R.string.supervisor_closing_failure), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if((first_supervisor_id == first_examiner_id) ||
-                    (first_supervisor_id == second_examiner_id) ||
-                    (second_supervisor_id == first_examiner_id) ||
-                    (second_supervisor_id == second_examiner_id)
-                    ){
-                Toast.makeText(this, getString(R.string.supervisor_examiner_closing_failure), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if(!(first_examiner_id == 0 && second_examiner_id == 0)){
-                if(first_examiner_id == second_examiner_id){
-                    Toast.makeText(this, getString(R.string.examiner_closing_faulure), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-
-            String final_title = et_title.getText().toString();
-            if(final_title.isEmpty()){
-                Toast.makeText(this, getString(R.string.final_title_failure), Toast.LENGTH_SHORT).show();
-                finish();
-            }
             String examiner_id1 = first_examiner_id == 0 ? null : String.valueOf(first_examiner_id);
             String examiner_id2 = second_examiner_id == 0 ? null : String.valueOf(second_examiner_id);
-            Call<Void> call = praoutlineInterface.approveDraft(preoutline_id,results,first_supervisor_id,second_supervisor_id,examiner_id1,examiner_id2,expertise_id,et_notes.getText().toString(),final_title);
+            Call<Void> call = praoutlineInterface.approveDraft(preoutline_id,results,first_supervisor_id,second_supervisor_id,examiner_id1,examiner_id2,expertise_id,et_notes.getText().toString(),finalTitle);
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
@@ -244,6 +233,39 @@ public class CloseDraftActivity extends AppCompatActivity {
         }
 
 
+    }
+
+
+    private boolean inputValidation(){
+        String finalTitle = et_title.getText().toString();
+
+        if(finalTitle.isEmpty()){
+            Toast.makeText(this, "Judul akhir tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(first_supervisor.getId() == second_supervisor.getId()){
+            Toast.makeText(this, "Pembimbing tidak boleh sama !", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(first_examiner.getId() > 0 || second_examiner.getId() > 0){
+            if(first_examiner.getId() == 0 || second_examiner.getId() == 0){
+                Toast.makeText(this, "Salah satu penguji kosong", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if(first_examiner.equals(second_examiner)){
+                Toast.makeText(this, "Penguji tidak boleh sama !", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
+        if(first_supervisor.getId() == first_examiner.getId() || first_supervisor.getId() == second_examiner.getId() || second_supervisor.getId() == first_examiner.getId() || second_supervisor.getId() == second_examiner.getId()){
+            Toast.makeText(this, "Penguji dan pembimbing tidak boleh sama", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     @Override

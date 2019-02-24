@@ -55,11 +55,6 @@ public class AnnouncementFragment extends Fragment {
         return mView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadAnnouncement();
-    }
 
     private void loadAnnouncement(){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(APIUrl.BASE_URL)

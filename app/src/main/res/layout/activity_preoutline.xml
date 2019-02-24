@@ -27,6 +27,7 @@
             <TextView
                 android:id="@+id/tv_draft_content"
                 android:padding="3sp"
+                android:textColorLink="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <LinearLayout
@@ -38,6 +39,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:paddingEnd="10sp"
+                    android:layout_marginBottom="10sp"
                     android:textAlignment="textEnd"
                     android:textAllCaps="true"
                     android:layout_width="match_parent"
@@ -56,14 +58,14 @@
                     android:gravity="center">
                     <ImageButton
                         android:id="@+id/ib_upvote"
-                        android:layout_width="20sp"
+                        android:layout_width="30sp"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_upvote" />
                     <TextView
                         android:id="@+id/tv_draft_upvote"
                         android:layout_width="wrap_content"
-                        android:textSize="15sp"
+                        android:textSize="18sp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2sp" />
                 </LinearLayout>
@@ -74,13 +76,13 @@
                     android:gravity="center">
                     <ImageButton
                         android:id="@+id/ib_downvote"
-                        android:layout_width="20sp"
+                        android:layout_width="30sp"
                         android:background="@android:color/transparent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_downvote" />
                     <TextView
                         android:id="@+id/tv_draft_downvote"
-                        android:textSize="15sp"
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2sp" />
@@ -92,7 +94,7 @@
                     android:gravity="center">
                     <ImageButton
                         android:id="@+id/ib_comment"
-                        android:layout_width="20sp"
+                        android:layout_width="30sp"
                         android:background="@android:color/transparent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_comment_gray_24dp" />
