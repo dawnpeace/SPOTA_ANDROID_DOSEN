@@ -228,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
                         tv_nav_identity_number.setText(mSharedPref.getUser().getIdentity_number());
 
                         if (!mSharedPref.getUser().isMajorheadmaster()) {
-                            navDrawer.getMenu().getItem(2).setVisible(false);
                             navDrawer.getMenu().getItem(4).setVisible(false);
                         }
                     }
